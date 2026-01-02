@@ -1,8 +1,6 @@
 # Sensitive files - DO NOT COMMIT
 utils.py 
 signal.py
-test_main.py
-optionsLive.py
 .env
 
 # Python
