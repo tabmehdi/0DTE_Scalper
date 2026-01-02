@@ -70,9 +70,14 @@ Edit `config.py` to customize:
 - **Trading Hours**: `START` and `END` times
 - **Indicator Parameters**: EMA, HMA, Supertrend, MACD, RSI settings
 
+Create `calculateSignal()` in `strategies/signal.py`
+
+- You can use the available indicators in `indicators.py` or use your own strategy
+- Return -1 to buy a put, 1 for a call or 0 for nothing
+  
 ## Technical Indicators
 
-The bot combines multiple indicators to generate signals:
+The bot provdes multiple indicators to generate signals:
 
 1. **Hull Moving Average (HMA)**: Trend direction
 2. **EMA Cross**: Short/long crossover signals
@@ -80,19 +85,19 @@ The bot combines multiple indicators to generate signals:
 4. **MACD**: Momentum and trend strength
 5. **RSI**: Overbought/oversold conditions
 
-Signals are aggregated using `calculateSignal()` with a lookback period.
+Signals are aggregated using `calculateSignal()`.
 
 ## API Requirements
 
 - **Alpaca Markets API**: For live and historical market data
   - Sign up at [alpaca.markets](https://alpaca.markets)
   - Get API key and secret
-- **Webhook Service**: For RelayDesk integration
+- **Webhook Service**: Uses [RelayDesk](https://relaydesk.trade/) for orders
 
 ## Future Implementation Goal
 
 - **Support for Canadian Broker** : Adding support for a Broker instead of relying on RelayDesk
-- **Indicators** : Adding support for more indicators to have better strategies
+- **Indicators (in progress)** : Adding support for more indicators to have better strategies
 - **Websocket Implementation** : Adding support for live options quotes for better price tracking
 - **Risk Management** : Each position will be protected by three exit mechanisms : Trailing Stop Loss, Hard Stop Loss, Time Constraint
 
