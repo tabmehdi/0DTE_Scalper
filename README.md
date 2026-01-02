@@ -4,10 +4,11 @@ A Python-based automated trading bot that analyzes market data using technical i
 
 ## Features
 
-- **Latest Options Integration**: Latest options price via Alpaca API
+- **Live Options Data** : Live options data via Alpaca WebSocket
 - **Technical Indicators**: Hull MA, EMA Cross, Supertrend, MACD, RSI
 - **Automated Signal Generation**: Analyzes market data every minute to detect trading opportunities
 - **Webhook Integration**: Sends buy/sell signals to RelayDesk
+- **Order Tracking and Risk Management**: Keeps track of the prices of a bought options and manages risk and exits
 
 ## Project Structure
 
@@ -70,6 +71,11 @@ Edit `config.py` to customize:
 - **Trading Hours**: `START` and `END` times
 - **Indicator Parameters**: EMA, HMA, Supertrend, MACD, RSI settings
 
+Create `calculateSignal()` in `strategies/signal.py`
+
+- You can use the available indicators in `indicators.py` or use your own strategy
+- Return -1 to buy a put, 1 for a call or 0 for nothing
+
 ## Technical Indicators
 
 The bot combines multiple indicators to generate signals:
@@ -89,12 +95,19 @@ Signals are aggregated using `calculateSignal()` with a lookback period.
   - Get API key and secret
 - **Webhook Service**: For RelayDesk integration
 
+## Risk Management
+
+Each position will be protected by three exit mechanisms 
+
+1. **Trailing Stop Loss**: Automatically closes the position if the price drops by a percentage below the highest price reached
+2. **Hard Stop Loss**: Sets a fixed maximum loss limit to prevent catastrophic losses on a single trade
+3. **Time Constraint**: Automatically exits the position at the end of trading hours to avoid overnight risk exposure
+
+
 ## Future Implementation Goal
 
 - **Support for Canadian Broker**: Adding support for a Broker instead of relying on RelayDesk
-- **Indicators (in progress)**: Adding support for more indicators to have better strategies
-- **Websocket Implementation (in progress)**: Adding support for live options quotes for better price tracking
-- **Risk Management (in progress)**: Each position will be protected by three exit mechanisms : Trailing Stop Loss, Hard Stop Loss, Time Constraint
+- **Indicators**: Adding support for more indicators to have better strategies
 
 ## Disclaimer
 
