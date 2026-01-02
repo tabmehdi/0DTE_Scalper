@@ -1,6 +1,6 @@
 # 0DTE Options Trading Signal Bot
 
-A Python-based automated trading bot that analyzes market data using technical indicators, generates buy/sell signals for 0DTE (zero days to expiration) options
+A Python-based automated trading bot that analyzes market data using technical indicators, generates buy/sell signals for 0DTE (zero days to expiration) options, tracks orders and manages exits
 
 ## Features
 
@@ -18,12 +18,14 @@ A Python-based automated trading bot that analyzes market data using technical i
 │   └── order.py             # Webhook order execution
 ├── data/
 │   ├── optionsInfo.py       # Options data fetching
+│   ├── optionsLive.py       # Live options price for tracking order
 │   └── tickerInfo.py        # Stock bar data fetching
 ├── strategies/
 │   ├── indicators.py        # Technical indicators
-│   └── signal.py            # Generates Signal
+│   └── signal.py            # Generates Signal (Create this file)
 ├── config.py                # Configuration
 ├── main.py                  # Production entry point
+├── test_main.py             # Testing
 └── requirements.txt         # Python dependencies
 ```
 
@@ -48,20 +50,14 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## API Requirements
+
+- **Alpaca Markets API/WebSocket**: For live and historical market data
+  - Sign up at [alpaca.markets](https://alpaca.markets)
+  - Get API key and secret
+- **Webhook Service**: For RelayDesk integration
+
 ## Usage
-
-### Run the Trading Bot
-
-```bash
-python main.py
-```
-
-The bot will:
-1. Connect to Alpaca WebSocket
-2. Load historical data
-3. Analyze the market every minute
-4. Generate buy/sell signals based on indicators
-5. Send webhook orders when signals trigger
 
 ### Configuration
 
@@ -70,11 +66,27 @@ Edit `config.py` to customize:
 - **Trading Symbol**: `SYMBOL = "SPY"`
 - **Trading Hours**: `START` and `END` times
 - **Indicator Parameters**: EMA, HMA, Supertrend, MACD, RSI settings
+- **Risk Management Parameters**: `TRAILING_SL`, `HARD_SL` and `TIMELIMIT`
 
 Create `calculateSignal()` in `strategies/signal.py`
 
 - You can use the available indicators in `indicators.py` or use your own strategy
 - Return -1 to buy a put, 1 for a call or 0 for nothing
+
+### Run the Trading Bot
+
+```bash
+python main.py
+```
+
+The bot will:
+1. Connect to Alpaca API and WebSocket
+2. Load historical data
+3. Analyze the market every minute
+4. Generate buy/sell signals based on implemented strategy
+5. Send webhook orders when signals trigger
+6. Track order price 
+7. Exits according to risk management strategy
 
 ## Technical Indicators
 
@@ -88,21 +100,13 @@ The bot combines multiple indicators to generate signals:
 
 Signals are aggregated using `calculateSignal()` with a lookback period.
 
-## API Requirements
-
-- **Alpaca Markets API**: For live and historical market data
-  - Sign up at [alpaca.markets](https://alpaca.markets)
-  - Get API key and secret
-- **Webhook Service**: For RelayDesk integration
-
 ## Risk Management
 
-Each position will be protected by three exit mechanisms 
+Each position is protected by three exit mechanisms 
 
-1. **Trailing Stop Loss**: Automatically closes the position if the price drops by a percentage below the highest price reached
-2. **Hard Stop Loss**: Sets a fixed maximum loss limit to prevent catastrophic losses on a single trade
-3. **Time Constraint**: Automatically exits the position at the end of trading hours to avoid overnight risk exposure
-
+1. **Trailing Stop Loss**: Tracks the highest price reached after entry and closes the position if price retraces by a configurable percentage.
+2. **Hard Stop Loss**: Immediately exits a trade when a fixed loss threshold is hit to prevent outsized losses.
+3. **Time Constraint**: Forces exit at configured end-of-day time to avoid overnight exposure for 0DTE trades.
 
 ## Future Implementation Goal
 
