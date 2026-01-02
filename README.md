@@ -56,11 +56,10 @@ python main.py
 ```
 
 The bot will:
-1. Connect to Alpaca WebSocket
-2. Load historical data
-3. Analyze the market every minute
-4. Generate buy/sell signals based on indicators
-5. Send webhook orders when signals trigger
+1. Load historical data using Alpaca API
+2. Analyze the market every minute
+3. Generate buy/sell signals based on indicators
+4. Send webhook orders when signals trigger
 
 ### Configuration
 
