@@ -92,7 +92,7 @@ Signals are aggregated using `calculateSignal()` with a lookback period.
 ## Future Implementation Goal
 
 - **Support for Canadian Broker**: Adding support for a Broker instead of relying on RelayDesk
-- **Indicators**: Adding support for more indicators to have better strategies
+- **Indicators (in progress)**: Adding support for more indicators to have better strategies
 - **Websocket Implementation (in progress)**: Adding support for live options quotes for better price tracking
 - **Risk Management (in progress)**: Each position will be protected by three exit mechanisms : Trailing Stop Loss, Hard Stop Loss, Time Constraint
 
