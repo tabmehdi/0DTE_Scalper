@@ -11,7 +11,7 @@ import config
 
 client = StockHistoricalDataClient(config.ALPACA_KEY, config.ALPACA_SECRET)
 
-def candleHist(symbol, start_time, end_time): #0.75s
+def candleHist(symbol, start_time, end_time):
     today = datetime.now().strftime("%Y-%m-%d")
 
     request = StockBarsRequest(

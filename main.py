@@ -8,11 +8,11 @@ import pandas as pd
 from datetime import datetime
 import time
 
-# Set options to display all rows, columns, and prevent width truncation
+
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_colwidth', None)
-pd.set_option('display.width', 1000) # Optional: Adjust the display width as needed
+pd.set_option('display.width', 1000)
 
 history_df = candleHist(config.SYMBOL, config.START, config.END)
 

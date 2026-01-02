@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
 
-import config
-
 def hullMA(df, length):
 
     df = df.copy()
@@ -105,8 +103,8 @@ def macd(df, fast_length, slow_length, signal_length):
     signal_line = macd_line.ewm(span=signal_length, adjust=False).mean()
 
     signal = pd.Series(0, index=df.index)
-    signal[macd_line > signal_line] = 1   # bullish
-    signal[macd_line < signal_line] = -1  # bearish
+    signal[macd_line > signal_line] = 1
+    signal[macd_line < signal_line] = -1
 
     return pd.DataFrame({"MACD_SIGNAL": signal})
 
@@ -128,8 +126,8 @@ def rsi(df, length, long_level, short_level):
     rsi = 100 - (100 / (1 + rs))
 
     signal = pd.Series(0, index=df.index)
-    signal[rsi <= long_level] = 1    # bullish / long
-    signal[rsi >= short_level] = -1  # bearish / short
+    signal[rsi <= long_level] = 1
+    signal[rsi >= short_level] = -1
 
     return pd.DataFrame({"RSI_SIGNAL": signal})
 
