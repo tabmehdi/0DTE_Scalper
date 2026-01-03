@@ -8,12 +8,12 @@ import config
 
 def optionSymbol(signal, current_price): 
 
-    if signal == -1:
-        option_type = "P"
-        strike = math.ceil(current_price)
-    else:
+    if signal == 1:
         option_type = "C"
         strike = math.floor(current_price)
+    elif signal == -1:
+        option_type = "P"
+        strike = math.ceil(current_price)
     
     date_part = datetime.now().strftime("%y%m%d")
     strike_part = f"{int(strike * 1000):08d}"
