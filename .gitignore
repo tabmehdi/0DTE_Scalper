@@ -2,6 +2,7 @@
 utils.py 
 signal.py
 .env
+backtest.py
 
 # Python
 __pycache__/

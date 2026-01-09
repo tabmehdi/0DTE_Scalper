@@ -109,26 +109,28 @@ def macd(df, fast_length, slow_length, signal_length):
     return pd.DataFrame({"MACD_SIGNAL": signal})
 
 def rsi(df, length, long_level, short_level):
-
     df = df.copy()
     src = df['Close']
-
-    delta = src.diff()
-
-    up = delta.clip(lower=0)
-    down = -delta.clip(upper=0)
-
-    alpha = 1 / length
-    up_ema = up.ewm(alpha=alpha, adjust=False).mean()
-    down_ema = down.ewm(alpha=alpha, adjust=False).mean()
-
-    rs = up_ema / down_ema
-    rsi = 100 - (100 / (1 + rs))
-
-    signal = pd.Series(0, index=df.index)
-    signal[rsi <= long_level] = 1
-    signal[rsi >= short_level] = -1
-
+    
+    change = src.diff()
+    
+    up = change.clip(lower=0)
+    down = -change.clip(upper=0)
+    
+    up_rma = up.ewm(alpha=1/length, min_periods=length, adjust=False).mean()
+    down_rma = down.ewm(alpha=1/length, min_periods=length, adjust=False).mean()
+    
+    rs = up_rma / down_rma
+    rsi_val = 100 - (100 / (1 + rs))
+    
+    rsi_val = rsi_val.replace([np.inf, -np.inf], 100)
+    rsi_val = rsi_val.fillna(50)
+    
+    signal = pd.Series(0, index=df.index, dtype=int)
+    
+    signal[rsi_val <= long_level] = 1
+    signal[rsi_val >= short_level] = -1
+    
     return pd.DataFrame({"RSI_SIGNAL": signal})
 
 

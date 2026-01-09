@@ -117,7 +117,10 @@ Each position is managed using four exit mechanisms designed specifically for 0D
 ## Future Implementation Goal
 
 - **Support for Canadian Broker**: The framework for the buy and exits signals exists already so adding support for a Broker instead of relying on RelayDesk would make this bot fully autonomous.
-- **More Indicators**: Adding support for more indicators to have better strategies
+- **More Indicators**: Adding support for more indicators to have better strategies.
+- **Trade Logging**: Record trade history in a database.
+- **Dashboard**: Build a dashboard to view trade history, balance history, strategy win rate, and other key metrics.
+- **Backtester**: Backtest strategies and risk management using real stock and options data.
 
 ## Disclaimer
 

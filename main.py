@@ -122,6 +122,24 @@ async def main_loop_async(option_live, history_df):
 
 
 async def main():
+    # Wait until 9:31am to start
+    now = datetime.now()
+    market_start = now.replace(hour=9, minute=31, second=1, microsecond=0)
+    market_end = now.replace(hour=16, minute=0, second=0, microsecond=0)
+    
+    # If it's before 9:31am, wait
+    if now < market_start:
+        wait_seconds = (market_start - now).total_seconds()
+        print(f"Current time: {now.strftime('%H:%M:%S')}")
+        print(f"Market opens at 9:31am. Waiting {wait_seconds:.0f} seconds...")
+        await asyncio.sleep(wait_seconds)
+        print("Market opened! Starting trading bot...")
+    
+    # If it's after 4:00pm, don't start
+    if now >= market_end:
+        print(f"Current time: {now.strftime('%H:%M:%S')}")
+        print("Market is closed (after 4:00pm). Exiting...")
+        return
     
     history_df = candleHist(config.SYMBOL, config.START, config.END)
     
@@ -136,10 +154,17 @@ async def main():
     
     print(f"Started trading bot for {config.SYMBOL}")
     print(f"Will check for signals every minute using real indicators")
+    print(f"Will stop at 4:00pm")
     print("=" * 60)
     
     try:
         while True:
+            # Check if it's past 4:00pm
+            current_time = datetime.now()
+            if current_time >= market_end:
+                print(f"\n{current_time.strftime('%H:%M:%S')} - Market closed (4:00pm). Shutting down...")
+                break
+            
             history_df, keep_running = await main_loop_async(option_live, history_df)
             if not keep_running:
                 break

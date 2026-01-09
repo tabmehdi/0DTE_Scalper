@@ -18,7 +18,7 @@ PUT_WEBHOOK = os.getenv("PUT_WEBHOOK")
 SYMBOL = "SPY"
 START = "T09:30:00-05:00"
 END = "T15:59:00-05:00"
-INDICATOR_LOOKBACK = 3
+INDICATOR_LOOKBACK = 2
 
 # EMA PARAMETERS
 EMA_SHORT_PERIOD = 5
@@ -43,17 +43,17 @@ RSI_SHORT = 60
 
 #SELLING PARAMETERS
 # Take Profit Levels (TP1 hits first, TP2 second, then trailing for remainder)
-TP1_PCT = 0.20           # % take profit level 1
+TP1_PCT = 0.5            # % take profit level 1
 TP1_POSITION_SIZE = 0.50 # Close % of position at TP1
 
-TP2_PCT = 0.40           # % take profit level 2
-TP2_POSITION_SIZE = 0.25 # Close % of position at TP2
+TP2_PCT = 0              # % take profit level 2
+TP2_POSITION_SIZE = 0    # Close % of position at TP2
 
 # Remaining % uses trailing stop AFTER TP2 is hit
-TRAILING_SL = 0.10       # % trailing stop loss (active after TP2)
+TRAILING_SL = 0.15       # % trailing stop loss (active after TP2)
 
 # Initial hard stop loss (moves to breakeven when TP1 hits)
 HARD_SL = 0.20           # % hard stop loss before TP1
 
 # Time parameters
-TIME_LIMIT = 420         # Seconds to hold position before exiting
+TIME_LIMIT = 1200         # Seconds to hold position before exiting
